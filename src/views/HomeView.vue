@@ -84,6 +84,7 @@ export default {
 
     /**
      * Load X pokemons between this.count and this.countSup and display in order them in the main div
+     * Displays their ID, name and one of the flavor text choosen randomly
      * @returns {Promise<void>}
      */
     async displayPokemons() {

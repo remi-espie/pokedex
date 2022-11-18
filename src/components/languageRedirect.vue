@@ -6,6 +6,7 @@
 <script>
 export default {
   name: "languageRedirect",
+  // change route according to browser language on website access
   created() {
     if (window.navigator.language==="fr"){
       this.$router.replace({path:"/fr/"})
