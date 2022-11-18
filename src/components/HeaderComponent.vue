@@ -67,6 +67,10 @@ export default {
     }
   },
   methods: {
+    /**
+     * Change lang of parameters according to URL.
+     * @param fullroute
+     */
     changeLang(fullroute) {
       let language;
       let route = fullroute.fullPath;
@@ -84,13 +88,27 @@ export default {
       this.searchText = language.header.search;
     },
 
+    /**
+     * Filter pokemon's list according to this.$refs['search'] value and return 10 results
+     * @returns {Promise<void>}
+     */
     displayPokemons() {
+      //if this.$refs['search'] is empty, hide results
       if (this.$refs['search'].value === "" || this.$refs['search'].value == null) this.displayResults = false;
       else {
         let pokeArray;
+        //select pokemons name according to language
         if (this.lang === "fr") pokeArray = this.pokemonsFR;
         else pokeArray = this.pokemonsEN;
-        pokeArray = pokeArray.filter(x => x.name.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, "").includes(this.$refs['search'].value.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, "")) || x.pokemon_species_id.includes(this.$refs['search'].value)).splice(0, 10);
+        let search = this.$refs['search'].value
+        //lowercase, normalize and replace every special letter by ascii ones for each pokeArray.name and result
+        pokeArray.forEach(x => {
+          x.nameNormalized = x.name.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, "")
+        })
+        search = search.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, "")
+        //filter by normalized name OR pokemon id
+        pokeArray = pokeArray.filter(x => x.nameNormalized.includes(search) || x.pokemon_species_id.includes(search)).splice(0, 10);
+        //set pokeArray data to page data
         this.pokemonArray = []
         for (let i = 0; i < pokeArray.length; i++) {
           let pokemon = [];
@@ -98,18 +116,25 @@ export default {
           pokemon['name'] = pokeArray[i].name + " | #" + pokeArray[i].pokemon_species_id;
           this.pokemonArray.push(pokemon)
         }
+        //set result width to search div and displays it
         this.$refs['result'].style.width = this.$refs['search'].offsetWidth + "px";
         this.displayResults = true;
-        console.log(this.displayResults)
       }
     },
 
+    /**
+     * hide result div after a few milliseconds
+     */
     hidePokemons() {
       setTimeout(() => {
         this.displayResults = false;
       }, 250);
     },
 
+    /**
+     * prevent key event on searchbox and redirect to search page
+     * @param event
+     */
     doSearch(event) {
       if (event.key === "Enter") {
         event.preventDefault();
@@ -117,6 +142,9 @@ export default {
       }
     },
 
+    /**
+     * redirect to search page on search button click
+     */
     searchPokemon() {
       if (this.$refs['search'].value !== "" && this.$refs['search'].value !== null) {
         this.$router.push({path: "/" + this.lang + "/search/" + this.$refs.search.value})
@@ -124,6 +152,7 @@ export default {
     }
   },
   mounted() {
+    //change lang and watch url change
     this.changeLang(this.$route);
     this.$watch(() => this.$route, (toParams) => {
       this.changeLang(toParams)

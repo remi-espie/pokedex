@@ -27,17 +27,21 @@ export default {
   components: {FooterComponent, HeaderComponent},
   data() {
     return {
+      //flag for loading spinner
       loaded: false,
+      //different flags for counting
       count: 1,
       countSup: 13,
       countMax: 905,
       flag: true,
       actualcount: 1,
+      //lang
       lang: "en"
     }
   },
   mounted() {
     //change lang at mounting if needed
+    //load pokemons in changeLang function
     this.changeLang(this.$route);
     this.$watch(() => this.$route, (toParams) => {
       this.changeLang(toParams);
@@ -51,9 +55,6 @@ export default {
           json = JSON.parse(json)
           this.countMax = json.count;
         })
-
-    //Display pokemons asynchronously starting from ID 1
-    this.displayPokemons()
     //change document title to website title
     document.title = "Le Meilleur Des Pokédex !"
 
@@ -77,6 +78,8 @@ export default {
       this.flag = true;
       this.actualcount = 1;
       if (this.$refs['column'] !== null) this.$refs['column'].innerHTML = ""
+      //(re)load pokemons in page
+      this.displayPokemons()
     },
 
     /**
