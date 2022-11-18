@@ -1,0 +1,32 @@
+{
+  "header": {
+    "home": "Home",
+    "random": "Random Pokémon",
+    "placeholder": "Celesteela",
+    "search": "Search"
+  },
+  "card": {
+    "height": "Height",
+    "weight": "Weight"
+  },
+  "details": {
+    "nameJP": "japanese name",
+    "nameTranslated": "french name",
+    "alt": "Official artwork of ",
+    "legendary": "Legendary Pokémon",
+    "mythical": "Mythical Pokémon",
+    "evolutionChain": "Evolution chain",
+    "noEvolution": "No evolution",
+    "height": "Height",
+    "weight": "Weight",
+    "error": "Error 404. How did you came here?"
+  },
+  "footer": {
+    "data": "Data fetched from the API of",
+    "love": "Made with ❤️ by Rémi ESPIE"
+  },
+  "error": {
+    "error404": "Error 404. How did you came here?",
+    "noPokemon": "No Pokémon found ! Better search for something else if you wanna catch them all..."
+  }
+}

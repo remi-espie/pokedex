@@ -1,0 +1,32 @@
+{
+  "header": {
+    "home": "Accueil",
+    "random": "Pokémon aléatoire",
+    "placeholder": "Bamboiselle",
+    "search": "Rechercher"
+  },
+  "card": {
+    "height": "Taille ",
+    "weight": "Poids "
+  },
+  "details": {
+    "nameJP" : "nom japonais",
+    "nameTranslated" : "nom anglais",
+    "alt": "Artword officiel de ",
+    "legendary": "Pokémon Légendaire",
+    "mythical": "Pokémon Mythique",
+    "evolutionChain": "Chaine d'évolution ",
+    "noEvolution": "Aucune évolution",
+    "height": "Taille ",
+    "weight": "Poids ",
+    "error": "Erreur 404. Comment êtes-vous arrivé ici ?"
+  },
+  "footer": {
+    "data" : "Données récupéré de l'API",
+    "love" : "Réalisé avec ❤️ par Rémi ESPIE"
+  },
+  "error": {
+    "error404": "Erreur 404. Comment êtes-vous arrivé ici ?",
+    "noPokemon" : "Aucun Pokémon trouvé ! Mieux vaut en chercher un autre si vous voulez tous les attraper..."
+  }
+}
