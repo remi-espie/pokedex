@@ -25,6 +25,7 @@ import languageEN from '@/assets/languageEN.json'
 
 export default {
   name: "CardComponent",
+  //data needed for the card
   props: {
     id: Number,
     src: String,
@@ -42,12 +43,17 @@ export default {
     }
   },
   mounted() {
+    //change lang at mounting if needed
     this.changeLang(this.$route)
     this.$watch(() => this.$route, (toParams) => {
       this.changeLang(toParams)
     })
   },
   methods:{
+    /**
+     * Change lang of parameters according to URL.
+     * @param fullroute
+     */
     changeLang(fullroute){
       let language;
       let route = fullroute.fullPath;

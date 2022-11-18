@@ -20,7 +20,6 @@ export default {
   },
   mounted() {
     //change lang at mounting if needed
-    //load pokemons in changeLang function
     this.changeLang(this.$route)
     this.$watch(() => this.$route, (toParams) => {
       this.changeLang(toParams)
