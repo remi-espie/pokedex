@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand-lg navbar-light mb-4">
       <img id="pokeball" src="@/assets/pokeball.svg" alt="Pokéball">
       <div class="container-fluid">
-        <router-link class="navbar-brand" to="/fr" id="titleIMG"><img src="@/assets/title.png"
+        <router-link class="navbar-brand" :to="'/'+this.lang" id="titleIMG"><img src="@/assets/title.png"
                                                                       alt="Le Meilleur des Pokédex !">
         </router-link>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -14,10 +14,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <router-link :to="'/'+lang" class="nav-link active" aria-current="page">{{ homeText }}</router-link>
+              <router-link :to="'/'+this.lang" class="nav-link active" aria-current="page">{{ homeText }}</router-link>
             </li>
             <li class="nav-item">
-              <router-link :to="'/'+lang+'/pokemon/random'" class="nav-link">{{ randomText }}</router-link>
+              <router-link :to="'/'+this.lang+'/pokemon/random'" class="nav-link">{{ randomText }}</router-link>
             </li>
           </ul>
           <div class="nav-item d-flex align-items-center justify-content-center p-2">
