@@ -41,8 +41,8 @@
               <h4>{{ varietyText }}</h4>
               <div class="d-flex flex-row justify-content-center card-body w-75 m-auto p-0">
                 <div class="d-flex flex-column m-2" v-for="(variety) in varieties" v-bind:key="variety.url">
-                  <span>{{ variety.name }}</span>
-                  <img :src="variety.url" :alt="variety.name" class="medium-image">
+                  <span class="m-auto">{{ variety.name }}</span>
+                  <img :src="variety.url" :alt="variety.name" class="medium-image m-auto">
                 </div>
               </div>
             </div>
