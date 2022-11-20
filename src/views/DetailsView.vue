@@ -33,7 +33,7 @@
             <div v-if="varieties.length>0">
               <hr>
               <h4>{{ varietyText }}</h4>
-              <div class="d-flex flex-row justify-content-center card-body w-75 m-auto p-0">
+              <div class="d-flex flex-row row row-cols-1 row-cols-sm-6 justify-content-center card-body w-75 m-auto p-0">
                 <div class="d-flex flex-column m-2" v-for="(variety) in varieties" v-bind:key="variety.url">
                   <span class="m-auto">{{ variety.name }}</span>
                   <img :src="variety.url" :alt="variety.name" class="medium-image m-auto">
@@ -363,9 +363,12 @@ export default {
               for (let form of json) {
                 form = JSON.parse(form)
                 let array = [];
-                let id = form.sprites.front_default.split('/');
-                id = id.pop() || id.pop();
-                array["url"] = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + id;
+                if (form.sprites.front_default) {
+                  let id = form.sprites.front_default.split('/');
+                  id = id.pop() || id.pop();
+                  array["url"] = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + id;
+                } else array["url"] = "";
+
                 if (form.form_names.length > 0) {
                   if (form.form_names.filter(x => x.language.name === this.lang)[0]) {
                     array["name"] = form.form_names.filter(x => x.language.name === this.lang)[0].name;
