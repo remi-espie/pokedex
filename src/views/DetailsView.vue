@@ -21,14 +21,8 @@
                 <h5>{{ type.lang }}</h5>
               </div>
             </div>
-            <div class="hex card-img-top m-auto">
-              <div class="hex_shape">
-                <div class="hex_shape">
-                  <div class="hex_shape" :style="'background-color:' + background +';'">
-                    <img class="rounded-0" :src="src" :alt="altText + alt">
-                  </div>
-                </div>
-              </div>
+            <div class=" card-img-top m-auto hex" :style="'background-color:' + background +';'">
+              <img class="pkmsprite" :src="src" :alt="altText + alt">
             </div>
             <div v-if="legendary">
               <hr>
@@ -48,7 +42,8 @@
             </div>
             <hr>
             <div>
-              <div v-if="evolve"><h4>{{ evolutionChainText }}:</h4>
+              <div v-if="evolve">
+                <h4>{{ evolutionChainText }}:</h4>
                 <div class="d-flex flex-column d-sm-flex flex-sm-row align-items-center m-auto"
                      style="width: min-content">
                   <div v-for="(evolution, index) in evolutionChain" v-bind:key="evolution.id"
@@ -305,11 +300,9 @@ export default {
       //set legendary text to legendary and/or mythical
       if (jsonSpecies.is_legendary) {
         this.legendary = this.lengendaryText;
-      }
-      else if (jsonSpecies.is_mythical) {
+      } else if (jsonSpecies.is_mythical) {
         this.legendary = this.mythicalText;
-      }
-      else {
+      } else {
         this.legendary = "";
       }
 
@@ -351,6 +344,7 @@ export default {
           id = id.pop() || id.pop();
           formFetches.push("https://pokeapi.co/api/v2/pokemon/" + id)
         }
+        //fetch all pokemons of each forms
         let formFetches2 = []
         await Promise.all(formFetches.map(url => fetch(url)))
             .catch(err => this.displayError(err))
@@ -375,8 +369,7 @@ export default {
                 if (form.form_names.length > 0) {
                   if (form.form_names.filter(x => x.language.name === this.lang)[0]) {
                     array["name"] = form.form_names.filter(x => x.language.name === this.lang)[0].name;
-                  }
-                  else {
+                  } else {
                     array["name"] = form.form_names[0].name
                   }
                 } else array["name"] = this.name.charAt(0) + this.name.slice(1).toLowerCase();
@@ -438,28 +431,16 @@ export default {
 }
 
 .hex {
-  position: relative;
+  clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
   width: 30vw;
   height: 35vw;
+  display: flex;
 }
 
 .hex img {
-  left: 50%;
-  position: relative;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(0.85, 0.85);
-  width: 100%;
-}
-
-.hex_shape {
-  position: absolute;
-  backface-visibility: hidden;
-  left: 0;
-  height: 100%;
-  overflow: hidden;
-  top: 0;
-  transform: rotate(120deg);
-  width: 100%;
+  width: 25vw;
+  height: 25vw;
+  margin: auto
 }
 
 #main {
