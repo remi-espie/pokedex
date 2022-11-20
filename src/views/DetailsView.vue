@@ -257,8 +257,8 @@ export default {
         fetches = [jsonSpecies.evolution_chain.url, ...jsonPokemon.types.map(type => type.type.url)]
       }
 
-      //await promise of all evolution and types fetches
-      await Promise.all(fetches.map(url => fetch(url)))
+      //promise of all evolution and types fetches
+      Promise.all(fetches.map(url => fetch(url)))
           .catch(err => this.displayError(err))
           .then(responses => Promise.all(responses.map(res => res.text())))
           .then(json => {
@@ -356,7 +356,7 @@ export default {
               }
             })
         //fetches all form to get their names
-        await Promise.all(formFetches2.map(url => fetch(url)))
+        Promise.all(formFetches2.map(url => fetch(url)))
             .catch(err => this.displayError(err))
             .then(responses => Promise.all(responses.map(res => res.text())))
             .then(json => {
