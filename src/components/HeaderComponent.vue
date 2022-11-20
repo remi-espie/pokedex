@@ -69,11 +69,11 @@ export default {
   methods: {
     /**
      * Change lang of parameters according to URL.
-     * @param fullroute
+     * @param fullRoute
      */
-    changeLang(fullroute) {
+    changeLang(fullRoute) {
       let language;
-      let route = fullroute.fullPath;
+      let route = fullRoute.fullPath;
       if (route.includes("/fr")) {
         language = languageFR;
         this.lang = "fr"
@@ -101,6 +101,7 @@ export default {
         //select pokemons name according to language
         if (this.lang === "fr") pokeArray = this.pokemonsFR;
         else pokeArray = this.pokemonsEN;
+
         let search = this.$refs['search'].value
 
         //lowercase, normalize and replace every special letter by ascii ones for each pokeArray.name and result
@@ -123,7 +124,8 @@ export default {
 
         //set result width to search div and displays it
         this.$refs['result'].style.width = this.$refs['search'].offsetWidth + "px";
-        this.displayResults = true;
+        //display results only if array length >0
+        this.displayResults = this.pokemonArray.length > 0;
       }
     },
 
