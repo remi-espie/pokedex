@@ -36,6 +36,16 @@
                 <h4>{{ legendary }}</h4>
               </div>
             </div>
+            <div v-if="varieties.length>0">
+              <hr>
+              <h4>{{ varietyText }}</h4>
+              <div class="d-flex flex-row justify-content-center card-body w-75 m-auto p-0">
+                <div class="d-flex flex-column m-2" v-for="(variety) in varieties" v-bind:key="variety.url">
+                  <span>{{ variety.name }}</span>
+                  <img :src="variety.url" :alt="variety.name" class="medium-image">
+                </div>
+              </div>
+            </div>
             <hr>
             <div>
               <div v-if="evolve"><h4>{{ evolutionChainText }}:</h4>
@@ -113,6 +123,7 @@ export default {
       weight: "",
       height: "",
       evolutionChain: [],
+      varieties: [],
       rotate: "rotate",
       evolve: false,
       loaded: false,
@@ -127,7 +138,8 @@ export default {
       weightText: "",
       errorText: "",
       lang: "en",
-      translatedLang: ""
+      translatedLang: "",
+      countMax: 905
     }
   },
   mounted() {
@@ -137,14 +149,23 @@ export default {
       this.changeLang(toParams)
     })
 
+    // asynchronously get the actual count of pokemons from the API and update this.countMax with the value
+    fetch("https://pokeapi.co/api/v2/pokemon-species?limit=100000&offset=0")
+        .catch(err => console.log(err))
+        .then(resp => resp.text())
+        .then((json) => {
+          json = JSON.parse(json)
+          this.countMax = json.count;
+        })
+
     //if ID is random, dispay a random pokemon
     //if ID is parsable as an int < max ID, display the pokemon of this ID
     //else display error
     if (this.$route.params.id === "random") {
       this.displayRandom();
-    } else if (parseInt(this.$route.params.id) <= 905) {
+    } else if (parseInt(this.$route.params.id) <= this.countMax) {
       this.displayPokemon(parseInt(this.$route.params.id))
-    } else if (parseInt(this.$route.params.id) > 905) {
+    } else if (parseInt(this.$route.params.id) > this.countMax) {
       this.displayError("Id inexistant")
     } else this.displayError();
 
@@ -182,6 +203,7 @@ export default {
       this.heightText = language.details.height;
       this.weightText = language.details.weight;
       this.errorText = language.details.error;
+      this.varietyText = language.details.variety
     },
 
     /**
@@ -200,7 +222,6 @@ export default {
      * @param err
      */
     displayError(err) {
-      console.log(err)
       if (err !== undefined) this.errorText = err
       this.error = true;
       document.title = " Le Meilleur Des Pokédex ! | Error";
@@ -241,8 +262,7 @@ export default {
         fetches = [jsonSpecies.evolution_chain.url, ...jsonPokemon.types.map(type => type.type.url)]
       }
 
-
-      //await promise of all fetches
+      //await promise of all evolution and types fetches
       await Promise.all(fetches.map(url => fetch(url)))
           .catch(err => this.displayError(err))
           .then(responses => Promise.all(responses.map(res => res.text())))
@@ -286,8 +306,11 @@ export default {
       if (jsonSpecies.is_legendary) {
         this.legendary = this.lengendaryText;
       }
-      if (jsonSpecies.is_mythical) {
+      else if (jsonSpecies.is_mythical) {
         this.legendary = this.mythicalText;
+      }
+      else {
+        this.legendary = "";
       }
 
       //set pokemon data
@@ -317,6 +340,52 @@ export default {
       this.background = color.rgb;
       //change page title to pokemon and set page loaded
       document.title = " Le Meilleur Des Pokédex | " + this.name;
+
+      //add varieties if they exists
+      this.varieties = [];
+      if (jsonSpecies.varieties.length > 1) {
+        //add all varieties url to formFetches array
+        let formFetches = [];
+        for (const variety of jsonSpecies.varieties) {
+          let id = variety.pokemon.url.split('/');
+          id = id.pop() || id.pop();
+          formFetches.push("https://pokeapi.co/api/v2/pokemon/" + id)
+        }
+        let formFetches2 = []
+        await Promise.all(formFetches.map(url => fetch(url)))
+            .catch(err => this.displayError(err))
+            .then(responses => Promise.all(responses.map(res => res.text())))
+            .then(json => {
+              for (let form of json) {
+                form = JSON.parse(form)
+                formFetches2.push(form.forms[0].url)
+              }
+            })
+        //fetches all form to get their names
+        await Promise.all(formFetches2.map(url => fetch(url)))
+            .catch(err => this.displayError(err))
+            .then(responses => Promise.all(responses.map(res => res.text())))
+            .then(json => {
+              for (let form of json) {
+                form = JSON.parse(form)
+                let array = [];
+                let id = form.sprites.front_default.split('/');
+                id = id.pop() || id.pop();
+                array["url"] = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + id;
+                if (form.form_names.length > 0) {
+                  if (form.form_names.filter(x => x.language.name === this.lang)[0]) {
+                    array["name"] = form.form_names.filter(x => x.language.name === this.lang)[0].name;
+                  }
+                  else {
+                    array["name"] = form.form_names[0].name
+                  }
+                } else array["name"] = this.name.charAt(0) + this.name.slice(1).toLowerCase();
+                this.varieties.push(array);
+              }
+            })
+      }
+
+      //all data loaded
       this.loaded = true;
     },
 
@@ -354,6 +423,10 @@ export default {
 
 .small-image {
   width: 50px;
+}
+
+.medium-image {
+  width: 100px;
 }
 
 .card {

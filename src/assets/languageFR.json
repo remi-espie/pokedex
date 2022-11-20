@@ -19,7 +19,8 @@
     "noEvolution": "Aucune évolution",
     "height": "Taille ",
     "weight": "Poids ",
-    "error": "Erreur 404. Comment êtes-vous arrivé ici ?"
+    "error": "Erreur 404. Comment êtes-vous arrivé ici ?",
+    "variety": "Formes :"
   },
   "footer": {
     "data" : "Données récupéré de l'API",

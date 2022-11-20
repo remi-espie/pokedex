@@ -19,7 +19,8 @@
     "noEvolution": "No evolution",
     "height": "Height",
     "weight": "Weight",
-    "error": "Error 404. How did you came here?"
+    "error": "Error 404. How did you came here?",
+    "variety" : "Varieties:"
   },
   "footer": {
     "data": "Data fetched from the API of",
